@@ -44,6 +44,8 @@ def result_to_dict(r: SearchResult) -> dict:
             rank=r.rank,
         ),
         "chunk_id": r.chunk_id,
+        "show_id": r.show_id,
+        "show_title": r.show_title,
         "season": r.season,
         "episode": r.episode,
         "episode_label": label,

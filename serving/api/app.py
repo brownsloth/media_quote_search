@@ -5,11 +5,13 @@ from __future__ import annotations
 import os
 import threading
 from contextlib import asynccontextmanager
+from typing import Literal
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 
+from event_log import append_event
 from search_service import QuoteSearchService
 
 search_service: QuoteSearchService | None = None
@@ -82,6 +84,20 @@ class SearchResponse(BaseModel):
     results: list[dict]
 
 
+class FeedbackRequest(BaseModel):
+    query: str = Field(..., min_length=1, max_length=500)
+    chunk_id: str = Field(..., min_length=1, max_length=200)
+    vote: Literal["up", "down"]
+    rank: int | None = Field(default=None, ge=1, le=10)
+    show_id: str | None = None
+    show_title: str | None = None
+    episode_label: str | None = None
+
+
+class FeedbackResponse(BaseModel):
+    ok: bool = True
+
+
 @app.get("/health")
 def health():
     if _load_error:
@@ -102,4 +118,31 @@ def search(body: SearchRequest):
         payload = svc.search(body.query, top_k=body.top_k)
     except Exception as e:
         raise HTTPException(500, str(e)) from e
+    append_event(
+        "query",
+        {
+            "query": body.query,
+            "top_k": body.top_k,
+            "latency_ms": payload["latency_ms"],
+            "result_count": len(payload["results"]),
+            "top_chunk_ids": [r["chunk_id"] for r in payload["results"][:3]],
+        },
+    )
     return SearchResponse(**payload)
+
+
+@app.post("/feedback", response_model=FeedbackResponse)
+def feedback(body: FeedbackRequest):
+    append_event(
+        "feedback",
+        {
+            "query": body.query,
+            "chunk_id": body.chunk_id,
+            "vote": body.vote,
+            "rank": body.rank,
+            "show_id": body.show_id,
+            "show_title": body.show_title,
+            "episode_label": body.episode_label,
+        },
+    )
+    return FeedbackResponse()

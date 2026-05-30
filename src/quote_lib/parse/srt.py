@@ -10,7 +10,19 @@ TIMESTAMP_LINE_RE = re.compile(
     r"^(?P<start>\d{1,2}:\d{2}:\d{2}[,.]\d{3})\s*-->\s*(?P<end>\d{1,2}:\d{2}:\d{2}[,.]\d{3})"
 )
 EPISODE_FILE_RE = re.compile(
-    r"Archer\.S(?P<season>\d+)E(?P<episode>\d+)\.(?P<release>[^/\\]+)\.srt$",
+    r"(?:Archer|Friends|The\.Office|Game\.of\.Thrones|Breaking\.Bad|"
+    r"Friends|Office|GoT|BB|[A-Za-z0-9._+-]+)"
+    r"\.S(?P<season>\d+)E(?P<episode>\d+)\.(?P<release>[^/\\]+)\.srt$",
+    re.IGNORECASE,
+)
+# Generic: anything.S01E02.Release.srt
+GENERIC_EPISODE_FILE_RE = re.compile(
+    r"\.S(?P<season>\d+)E(?P<episode>\d+)\.(?P<release>[^/\\]+)\.srt$",
+    re.IGNORECASE,
+)
+# OpenSubtitles download layout: S01E01.srt
+FLAT_EPISODE_FILE_RE = re.compile(
+    r"^S(?P<season>\d+)E(?P<episode>\d+)\.srt$",
     re.IGNORECASE,
 )
 
@@ -40,10 +52,11 @@ class ParsedEpisode:
 
 
 def parse_episode_from_path(path: Path) -> tuple[int | None, int | None, str | None]:
-    match = EPISODE_FILE_RE.search(path.name)
-    if not match:
-        return None, None, None
-    return int(match.group("season")), int(match.group("episode")), match.group("release")
+    for pattern in (EPISODE_FILE_RE, GENERIC_EPISODE_FILE_RE, FLAT_EPISODE_FILE_RE):
+        match = pattern.search(path.name)
+        if match:
+            return int(match.group("season")), int(match.group("episode")), match.group("release") if "release" in match.groupdict() else None
+    return None, None, None
 
 
 def timestamp_to_ms(value: str) -> int:

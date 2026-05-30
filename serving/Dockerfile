@@ -23,9 +23,11 @@ ENV SERVE_ARTIFACTS_DIR=/app/serving/artifacts
 ENV SERVE_INDEX_DIR=/app/serving/artifacts/index
 ENV NETFLIX_MAPPING_PATH=/app/serving/artifacts/netflix/archer_episodes.json
 ENV PYTHONPATH=/app/src:/app
+ENV EVENT_LOG_PATH=/tmp/quote_memory_events.jsonl
 # Set on Railway: CORS_ORIGINS, NETFLIX_ID, SECURE_NETFLIX_ID, HF_TOKEN
+# Feedback → Dropbox: DROPBOX_ACCESS_TOKEN, DROPBOX_FEEDBACK_PATH
 
-# ~180 MB index pulled at build time from Hugging Face.
+# Index pulled at build time from Hugging Face (~850 MB for universal + Archer).
 RUN python serving/download_artifacts.py
 
 RUN chmod +x serving/entrypoint.sh

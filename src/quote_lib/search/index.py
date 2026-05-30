@@ -27,6 +27,8 @@ class SearchResult:
     text_embed: str
     start_ms: int
     end_ms: int = 0
+    show_id: str | None = None
+    show_title: str | None = None
     context_before: list[str] = field(default_factory=list)
     context_after: list[str] = field(default_factory=list)
     guardrail_note: str | None = None
@@ -154,7 +156,7 @@ class ChunkIndex:
 
         for adjusted, _idx, ce, ann, fuzzy, note, chunk in scored:
             if max_per_episode is not None:
-                ep_key = f"{chunk.get('season')}:{chunk.get('episode')}"
+                ep_key = f"{chunk.get('show_id')}:{chunk.get('season')}:{chunk.get('episode')}"
                 if episode_counts.get(ep_key, 0) >= max_per_episode:
                     continue
                 episode_counts[ep_key] = episode_counts.get(ep_key, 0) + 1
@@ -167,6 +169,8 @@ class ChunkIndex:
                     ann_score=ann,
                     fuzzy_score=fuzzy,
                     chunk_id=chunk["chunk_id"],
+                    show_id=chunk.get("show_id"),
+                    show_title=chunk.get("show_title"),
                     season=chunk.get("season"),
                     episode=chunk.get("episode"),
                     text_line=chunk["text_line"],

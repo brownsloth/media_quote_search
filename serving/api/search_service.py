@@ -5,8 +5,8 @@ from __future__ import annotations
 import json
 import os
 import time
+from collections import Counter
 from pathlib import Path
-
 from quote_lib.links.netflix import _load_mapping
 from quote_lib.search.format import result_to_dict
 from quote_lib.search.guardrail_config import GuardrailConfig
@@ -43,11 +43,16 @@ class QuoteSearchService:
     def health(self) -> dict:
         netflix = _load_mapping()
         episodes = netflix.get("episodes") or {}
+        by_show = Counter(
+            (c.get("show_title") or c.get("show_id") or "unknown") for c in self.index.chunks
+        )
+        shows = [{"title": title, "chunks": count} for title, count in by_show.most_common()]
         return {
             "index_dir": str(self.index_dir),
             "chunk_count": self.meta.get("chunk_count"),
             "embedding_model": self.meta.get("model_name"),
             "reranker_model": self.meta.get("reranker_model"),
+            "shows": shows,
             "netflix_show_id": netflix.get("show_id"),
             "netflix_episode_count": len(episodes),
         }

@@ -27,6 +27,7 @@ class DistributionStats:
 class ChunkRecord:
     chunk_id: str
     show_id: str
+    show_title: str | None
     season: int | None
     episode: int | None
     cue_index: int
@@ -69,6 +70,7 @@ def build_chunks_for_episode(
     parsed_episode,
     *,
     show_id: str = "archer",
+    show_title: str | None = None,
     context_window: int = 5,
 ) -> list[ChunkRecord]:
     dialogue = [c for c in parsed_episode.cues if not c.is_watermark and c.text_clean]
@@ -88,6 +90,7 @@ def build_chunks_for_episode(
             ChunkRecord(
                 chunk_id=chunk_id,
                 show_id=show_id,
+                show_title=show_title,
                 season=season,
                 episode=episode,
                 cue_index=idx,
@@ -183,3 +186,30 @@ def write_jsonl(path: Path, rows: list[dict]) -> None:
     with path.open("w", encoding="utf-8") as f:
         for row in rows:
             f.write(json.dumps(row, ensure_ascii=False) + "\n")
+
+
+def build_chunks(
+    srt_paths: list[Path],
+    *,
+    show_id: str,
+    show_title: str | None = None,
+    context_window: int = 5,
+) -> list[ChunkRecord]:
+    from quote_lib.parse.srt import parse_srt_file
+
+    chunks: list[ChunkRecord] = []
+    for path in srt_paths:
+        parsed = parse_srt_file(path)
+        chunks.extend(
+            build_chunks_for_episode(
+                parsed,
+                show_id=show_id,
+                show_title=show_title,
+                context_window=context_window,
+            )
+        )
+    return chunks
+
+
+def write_chunks_jsonl(chunks: list[ChunkRecord], path: Path) -> None:
+    write_jsonl(path, [asdict(c) for c in chunks])
