@@ -1,0 +1,10 @@
+{
+  "strict_miss_penalty": 3.0,
+  "strict_strong_boost": 0.75,
+  "strict_partial_boost": 0.25,
+  "strict_strong_fuzzy_threshold": 0.90,
+  "soft_boost": 0.5,
+  "soft_miss_penalty": 1.0,
+  "soft_fuzzy_threshold": 0.85,
+  "soft_weak_fuzzy": 0.40
+}

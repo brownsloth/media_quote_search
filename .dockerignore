@@ -1,0 +1,32 @@
+# Minimal Docker build context for serving/Dockerfile (Railway).
+# Index is downloaded from Hugging Face at build time, not copied from git.
+
+.git
+.github
+.venv
+venv
+__pycache__
+*.pyc
+.env
+.env.*
+
+# Large local data
+data/index
+data/processed
+29thMay
+
+# Dev / docs / eval (not needed in API image)
+eval
+scripts/eval
+scripts/ingest
+scripts/search
+serving/artifacts
+serving/web
+serving/run_*.sh
+*.md
+!serving/README.md
+
+.cursor
+.idea
+.vscode
+.DS_Store

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quote Memory · Archer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;600&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <p class="label">Half-remember a line?</p>
+
+      <textarea
+        id="input"
+        class="box input-box"
+        rows="2"
+        placeholder="you're in the danger zone"
+        spellcheck="false"
+      ></textarea>
+
+      <h1 class="title">Quote Memory</h1>
+      <p class="subtitle">Archer · fuzzy subtitle search</p>
+
+      <div id="status" class="status" hidden></div>
+      <div id="results" class="results" aria-live="polite"></div>
+    </main>
+    <script src="config.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

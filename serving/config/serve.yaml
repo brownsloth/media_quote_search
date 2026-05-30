@@ -1,0 +1,13 @@
+index:
+  dir: index
+  chunk_count: 65992
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  reranker_model: cross-encoder/ms-marco-MiniLM-L-6-v2
+
+search:
+  default_top_k: 5
+  ann_top: 200
+
+netflix:
+  show_title_id: "70171942"
+  show_name: Archer

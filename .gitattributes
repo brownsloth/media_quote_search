@@ -1,0 +1,12 @@
+# Normalize line endings (fixes shell scripts on Windows/macOS)
+* text=auto eol=lf
+
+*.sh text eol=lf
+*.bash text eol=lf
+
+# Binary / large artifacts (if ever force-added)
+*.npy binary
+*.npz binary
+
+# Linguist: don't count generated eval variants as repo code
+eval/queries_archer_variants.jsonl linguist-generated

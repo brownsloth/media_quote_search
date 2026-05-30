@@ -1,0 +1,176 @@
+{
+  "summary": {
+    "chunk_count": 65992,
+    "episode_count": 142,
+    "speaker_attributed_cues": 7547,
+    "speaker_attributed_pct": 11.44,
+    "short_line_lt4_tokens_pct": 17.87
+  },
+  "cue_line_tokens": {
+    "count": 65992,
+    "mean": 6.62,
+    "stdev": 3.21,
+    "min": 0,
+    "p50": 6,
+    "p90": 11,
+    "p95": 12,
+    "p99": 15,
+    "max": 21
+  },
+  "chunk_embed_tokens": {
+    "count": 65992,
+    "mean": 72.46,
+    "stdev": 15.8,
+    "min": 12,
+    "p50": 73,
+    "p90": 91,
+    "p95": 97,
+    "p99": 116,
+    "max": 160
+  },
+  "context_ablation": {
+    "pm3": {
+      "context_window": 3,
+      "embed_tokens": {
+        "count": 65992,
+        "mean": 46.21,
+        "stdev": 11.28,
+        "min": 6,
+        "p50": 46,
+        "p90": 60,
+        "p95": 64,
+        "p99": 76,
+        "max": 112
+      },
+      "pct_truncated_at_256": 0.0,
+      "pct_truncated_at_384": 0.0
+    },
+    "pm5": {
+      "context_window": 5,
+      "embed_tokens": {
+        "count": 65992,
+        "mean": 72.46,
+        "stdev": 15.8,
+        "min": 12,
+        "p50": 73,
+        "p90": 91,
+        "p95": 97,
+        "p99": 116,
+        "max": 160
+      },
+      "pct_truncated_at_256": 0.0,
+      "pct_truncated_at_384": 0.0
+    },
+    "pm7": {
+      "context_window": 7,
+      "embed_tokens": {
+        "count": 65992,
+        "mean": 98.59,
+        "stdev": 20.19,
+        "min": 21,
+        "p50": 99,
+        "p90": 122,
+        "p95": 129,
+        "p99": 156,
+        "max": 209
+      },
+      "pct_truncated_at_256": 0.0,
+      "pct_truncated_at_384": 0.0
+    }
+  },
+  "model_truncation_whitespace_proxy": {
+    "256": {
+      "pct_embed_tokens_truncated": 0.0
+    },
+    "384": {
+      "pct_embed_tokens_truncated": 0.0
+    }
+  },
+  "top_duplicate_lines": [
+    {
+      "text_clean": "what?",
+      "count": 96
+    },
+    {
+      "text_clean": "no.",
+      "count": 60
+    },
+    {
+      "text_clean": "_",
+      "count": 54
+    },
+    {
+      "text_clean": "oh.",
+      "count": 53
+    },
+    {
+      "text_clean": "what?!",
+      "count": 52
+    },
+    {
+      "text_clean": "wh-?",
+      "count": 49
+    },
+    {
+      "text_clean": "archer!",
+      "count": 39
+    },
+    {
+      "text_clean": "ow!",
+      "count": 36
+    },
+    {
+      "text_clean": "no!",
+      "count": 35
+    },
+    {
+      "text_clean": "right?",
+      "count": 32
+    },
+    {
+      "text_clean": "yes.",
+      "count": 31
+    },
+    {
+      "text_clean": "really?",
+      "count": 27
+    },
+    {
+      "text_clean": "yes!",
+      "count": 27
+    },
+    {
+      "text_clean": "yeah.",
+      "count": 25
+    },
+    {
+      "text_clean": "whoa!",
+      "count": 23
+    },
+    {
+      "text_clean": "lana!",
+      "count": 22
+    },
+    {
+      "text_clean": "ah!",
+      "count": 21
+    },
+    {
+      "text_clean": "shut up.",
+      "count": 20
+    },
+    {
+      "text_clean": "oh, my god.",
+      "count": 19
+    },
+    {
+      "text_clean": "okay.",
+      "count": 19
+    }
+  ],
+  "notes": [
+    "Token counts use whitespace/word regex, not the embedding model tokenizer.",
+    "Compare against MiniLM (256) and mpnet (384) limits as a conservative proxy.",
+    "Re-run with model tokenizer once sentence-transformers is installed."
+  ]
+}

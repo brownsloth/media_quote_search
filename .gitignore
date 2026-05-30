@@ -1,0 +1,77 @@
+# --- Python ---
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+*.cover
+
+# --- Secrets / local env ---
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# --- OS / editor ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/
+*.code-workspace
+.cursor/
+
+# --- ML / Hugging Face cache (if ever inside repo) ---
+.cache/
+models/
+checkpoints/
+
+# --- Large generated data (index lives on Hugging Face Hub) ---
+data/index/
+data/processed/cues.jsonl
+data/processed/chunks.jsonl
+data/processed/manifest/
+data/processed/audit/
+data/processed/parse_summary.json
+
+# Keep small deploy configs
+!data/processed/stats/
+!data/processed/stats/**
+
+# --- Raw subtitle source (local only; do not push) ---
+29thMay/
+
+# --- HF upload staging (rebuilt by serving/package_artifacts.sh) ---
+serving/artifacts/
+
+# --- Generated eval (regenerate: scripts/eval/run_expand_queries.sh) ---
+eval/queries_archer_variants.jsonl
+
+# --- Logs / temp ---
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# --- Optional: smoke-test reports in partial indexes ---
+**/smoke_test*.json
