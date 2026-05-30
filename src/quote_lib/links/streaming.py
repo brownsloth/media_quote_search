@@ -13,7 +13,8 @@ from quote_lib.links.netflix import (
     resolve_netflix_link as resolve_archer_netflix_link,
 )
 
-DEFAULT_CATALOG = Path(__file__).resolve().parents[3] / "data" / "catalog" / "streaming_links.json"
+DEFAULT_CATALOG = Path(__file__).resolve().parent / "streaming_links.json"
+FALLBACK_CATALOG = Path(__file__).resolve().parents[3] / "data" / "catalog" / "streaming_links.json"
 
 TITLE_TO_SHOW_ID = {
     "archer": "archer",
@@ -26,7 +27,18 @@ TITLE_TO_SHOW_ID = {
 
 @lru_cache(maxsize=1)
 def _load_catalog(path: str | None = None) -> dict[str, dict]:
-    catalog_path = Path(path or os.environ.get("STREAMING_LINKS_PATH", DEFAULT_CATALOG))
+    if path:
+        catalog_path = Path(path)
+    else:
+        env_path = os.environ.get("STREAMING_LINKS_PATH", "").strip()
+        if env_path:
+            catalog_path = Path(env_path)
+        elif DEFAULT_CATALOG.is_file():
+            catalog_path = DEFAULT_CATALOG
+        elif FALLBACK_CATALOG.is_file():
+            catalog_path = FALLBACK_CATALOG
+        else:
+            return {}
     if not catalog_path.is_file():
         return {}
     data = json.loads(catalog_path.read_text(encoding="utf-8"))

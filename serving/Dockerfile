@@ -11,7 +11,6 @@ RUN pip install --no-cache-dir -r /tmp/requirements.txt
 
 COPY src/quote_lib ./src/quote_lib
 COPY data/netflix ./data/netflix
-COPY data/catalog ./data/catalog
 COPY scripts/data/fetch_archer_netflix_ids.py ./scripts/data/fetch_archer_netflix_ids.py
 COPY serving/api ./serving/api
 COPY serving/config ./serving/config

@@ -1,0 +1,29 @@
+{
+  "shows": {
+    "archer": {
+      "provider": "netflix",
+      "label": "Netflix",
+      "title_id": "70171942"
+    },
+    "friends": {
+      "provider": "netflix",
+      "label": "Netflix",
+      "title_id": "70153404"
+    },
+    "the_office": {
+      "provider": "netflix",
+      "label": "Netflix",
+      "title_id": "70136120"
+    },
+    "game_of_thrones": {
+      "provider": "hotstar",
+      "label": "Hotstar",
+      "url": "https://www.hotstar.com/in/shows/game-of-thrones/1971002880?utm_source=gwa"
+    },
+    "breaking_bad": {
+      "provider": "netflix",
+      "label": "Netflix",
+      "title_id": "70143836"
+    }
+  }
+}
