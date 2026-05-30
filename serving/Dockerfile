@@ -33,4 +33,4 @@ RUN chmod +x serving/entrypoint.sh
 EXPOSE 8000
 
 WORKDIR /app/serving/api
-CMD ["sh", "/app/serving/entrypoint.sh"]
+CMD ["bash", "/app/serving/entrypoint.sh"]
