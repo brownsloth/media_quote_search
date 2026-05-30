@@ -237,12 +237,12 @@ body {
   flex: 1;
 }
 
+.stream-btn,
 .netflix-btn {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
   padding: 0.35rem 0.65rem;
-  background: var(--netflix);
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -255,11 +255,22 @@ body {
   white-space: nowrap;
 }
 
+.stream-btn--netflix,
+.netflix-btn {
+  background: var(--netflix);
+}
+
+.stream-btn--hotstar {
+  background: linear-gradient(135deg, #0084ff 0%, #0052cc 100%);
+}
+
+.stream-btn:hover,
 .netflix-btn:hover {
   filter: brightness(1.08);
   transform: translateY(-1px);
 }
 
+.stream-btn svg,
 .netflix-btn svg {
   width: 14px;
   height: 14px;

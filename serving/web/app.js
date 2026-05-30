@@ -12,6 +12,25 @@ let requestId = 0;
 let lastQuery = "";
 
 const NETFLIX_N = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M5.398 0v24L12 20.1 18.602 24V0H5.398z"/></svg>`;
+const HOTSTAR_ICON = `<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z"/></svg>`;
+
+function streamButton(r) {
+  const provider = r.stream_provider || "netflix";
+  const url = r.stream_url || r.netflix_url || "#";
+  const label = r.stream_label || (provider === "hotstar" ? "Hotstar" : "Netflix");
+  const show = r.show_title || "";
+  const ep = r.episode_label ? ` — find ${r.episode_label}` : "";
+  const title = show ? `Open ${show} on ${label}${ep}` : `Open on ${label}${ep}`;
+  const icon = provider === "hotstar" ? HOTSTAR_ICON : NETFLIX_N;
+  const cls = provider === "hotstar" ? "stream-btn stream-btn--hotstar" : "stream-btn stream-btn--netflix";
+  return `
+    <a class="${cls}"
+       href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer"
+       title="${escapeHtml(title)}">
+      ${icon}
+      ${escapeHtml(label)}
+    </a>`;
+}
 
 function setStatus(text, { error = false } = {}) {
   statusEl.hidden = !text;
@@ -47,9 +66,6 @@ function renderCard(r) {
   const note = r.guardrail_note
     ? `<span class="guardrail-note">${escapeHtml(r.guardrail_note)}</span>`
     : `<span class="guardrail-note"></span>`;
-  const netflixTitle = show
-    ? `Open ${show} on Netflix${r.episode_label ? " — find " + r.episode_label : ""}`
-    : `Open on Netflix${r.episode_label ? " — find " + r.episode_label : ""}`;
 
   return `
     <article class="card" data-chunk-id="${escapeHtml(r.chunk_id)}" data-rank="${r.rank}">
@@ -73,12 +89,7 @@ function renderCard(r) {
             <button type="button" class="feedback-btn" data-vote="down" title="Bad match">👎</button>
             <span class="feedback-msg" hidden></span>
           </div>
-          <a class="netflix-btn netflix-btn--show"
-             href="${escapeHtml(r.netflix_url)}" target="_blank" rel="noopener noreferrer"
-             title="${escapeHtml(netflixTitle)}">
-            ${NETFLIX_N}
-            Netflix
-          </a>
+          ${streamButton(r)}
         </div>
       </div>
     </article>

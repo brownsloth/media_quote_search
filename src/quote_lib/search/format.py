@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from quote_lib.links.netflix import resolve_netflix_link
+from quote_lib.links.streaming import resolve_streaming_link
 from quote_lib.search.index import SearchResult
 
 
@@ -30,7 +30,7 @@ def confidence_band(*, score: float, ce_score: float, fuzzy_score: float, rank: 
 
 def result_to_dict(r: SearchResult) -> dict:
     label = episode_label(r.season, r.episode)
-    netflix = resolve_netflix_link(r.season, r.episode)
+    stream = resolve_streaming_link(r.show_id, r.season, r.episode, show_title=r.show_title)
     return {
         "rank": r.rank,
         "score": round(r.score, 4),
@@ -56,6 +56,6 @@ def result_to_dict(r: SearchResult) -> dict:
         "text_line": r.text_line,
         "context_before": r.context_before,
         "context_after": r.context_after,
-        **netflix,
+        **stream,
         "guardrail_note": r.guardrail_note,
     }
