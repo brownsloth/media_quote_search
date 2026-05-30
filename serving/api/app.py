@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import threading
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException
@@ -12,12 +13,34 @@ from pydantic import BaseModel, Field
 from search_service import QuoteSearchService
 
 search_service: QuoteSearchService | None = None
+_load_lock = threading.Lock()
+_load_error: str | None = None
+
+
+def _get_or_load_service() -> QuoteSearchService:
+    global search_service, _load_error
+    if search_service is not None:
+        return search_service
+    if _load_error is not None:
+        raise RuntimeError(_load_error)
+    with _load_lock:
+        if search_service is not None:
+            return search_service
+        if _load_error is not None:
+            raise RuntimeError(_load_error)
+        try:
+            print("Loading index and models (first request may take 30–60s) ...", flush=True)
+            search_service = QuoteSearchService()
+            print("Index ready.", flush=True)
+            return search_service
+        except Exception as e:
+            _load_error = str(e)
+            raise
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    global search_service
-    search_service = QuoteSearchService()
+    # Bind HTTP immediately; load heavy index on first /health or /search.
     yield
 
 
@@ -30,6 +53,8 @@ DEFAULT_CORS_ORIGINS = ",".join(
         "http://127.0.0.1:8888",
         "http://localhost:8000",
         "http://127.0.0.1:8000",
+        "http://localhost:8001",
+        "http://127.0.0.1:8001",
     ]
 )
 
@@ -59,6 +84,8 @@ class SearchResponse(BaseModel):
 
 @app.get("/health")
 def health():
+    if _load_error:
+        return {"status": "error", "error": _load_error, "cors_origins": allowed_origins}
     if search_service is None:
         return {"status": "starting", "cors_origins": allowed_origins}
     info = search_service.health()
@@ -67,10 +94,12 @@ def health():
 
 @app.post("/search", response_model=SearchResponse)
 def search(body: SearchRequest):
-    if search_service is None:
-        raise HTTPException(503, "Index not loaded")
     try:
-        payload = search_service.search(body.query, top_k=body.top_k)
+        svc = _get_or_load_service()
+    except RuntimeError as e:
+        raise HTTPException(503, str(e)) from e
+    try:
+        payload = svc.search(body.query, top_k=body.top_k)
     except Exception as e:
         raise HTTPException(500, str(e)) from e
     return SearchResponse(**payload)

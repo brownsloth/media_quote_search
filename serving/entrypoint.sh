@@ -17,4 +17,4 @@ if [[ -n "${NETFLIX_ID:-}" && -n "${SECURE_NETFLIX_ID:-}" ]] || [[ -n "${NETFLIX
   fi
 fi
 
-exec uvicorn app:app --host 0.0.0.0 --port "${PORT:-8000}"
+exec uvicorn app:app --host 0.0.0.0 --port "${PORT:-8000}" --app-dir /app/serving/api
